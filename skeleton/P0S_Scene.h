@@ -2,6 +2,7 @@
 
 #include "Scene.h"
 #include "RenderUtils.hpp"
+#include "Particle.h"
 #include <vector>
 
 class P0S_Scene : public Scene {
@@ -10,34 +11,41 @@ public:
 
     void init() override {
         // Ejemplo: Creación de una esfera usando las utilidades de render existentes
-        physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
-        m_transform = physx::PxTransform(physx::PxVec3(10.0f, 0.0f, 0.0f));
+        //physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
+        //m_transform = physx::PxTransform(physx::PxVec3(10.0f, 0.0f, 0.0f));
 
-        // Se registra el RenderItem exactamente como en la plantilla original
-        m_renderItem = new RenderItem(shape, &m_transform, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        //// Se registra el RenderItem exactamente como en la plantilla original
+        //m_renderItem = new RenderItem(shape, &m_transform, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 
-        physx::PxShape* shape1 = CreateShape(physx::PxSphereGeometry(2.0f));
-        m_transform1 = physx::PxTransform(physx::PxVec3(0.0f, 10.0f, 0.0f));
+        //physx::PxShape* shape1 = CreateShape(physx::PxSphereGeometry(2.0f));
+        //m_transform1 = physx::PxTransform(physx::PxVec3(0.0f, 10.0f, 0.0f));
 
-        // Se registra el RenderItem exactamente como en la plantilla original
-        m_renderItem1 = new RenderItem(shape1, &m_transform1, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+        //// Se registra el RenderItem exactamente como en la plantilla original
+        //m_renderItem1 = new RenderItem(shape1, &m_transform1, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 
-        physx::PxShape* shape2 = CreateShape(physx::PxSphereGeometry(2.0f));
-        m_transform2 = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 10.0f));
+        //physx::PxShape* shape2 = CreateShape(physx::PxSphereGeometry(2.0f));
+        //m_transform2 = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 10.0f));
 
-        // Se registra el RenderItem exactamente como en la plantilla original
-        m_renderItem2 = new RenderItem(shape2, &m_transform2, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+        //// Se registra el RenderItem exactamente como en la plantilla original
+        //m_renderItem2 = new RenderItem(shape2, &m_transform2, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 
-        physx::PxShape* shape3 = CreateShape(physx::PxSphereGeometry(2.0f));
-        m_transform3 = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
+        //physx::PxShape* shape3 = CreateShape(physx::PxSphereGeometry(2.0f));
+        //m_transform3 = physx::PxTransform(physx::PxVec3(0.0f, 0.0f, 0.0f));
 
-        // Se registra el RenderItem exactamente como en la plantilla original
-        m_renderItem3 = new RenderItem(shape3, &m_transform3, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+        //// Se registra el RenderItem exactamente como en la plantilla original
+        //m_renderItem3 = new RenderItem(shape3, &m_transform3, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
+
+        //P1
+
+        //physx::PxShape* shape3 = CreateShape(physx::PxSphereGeometry(2.0f));
+        m_renderParticle1 = new Particle(Vector3(0, 0, 0), Vector3(1, 0, 0));
+
     }
 
     void update(double dt) override {
         // Lógica/Integración del alumno (por ejemplo, movimiento simple)
         //m_transform.p.y -= static_cast<float>(9.8 * dt);
+        m_renderParticle1->integrate(dt);
     }
 
     void keyPress(unsigned char key, const physx::PxTransform& camera) override {
@@ -74,4 +82,8 @@ private:
     RenderItem* m_renderItem2{ nullptr };
     physx::PxTransform m_transform3;
     RenderItem* m_renderItem3{ nullptr };
+
+    //P1
+    Particle* m_renderParticle1{ nullptr };
+
 };
