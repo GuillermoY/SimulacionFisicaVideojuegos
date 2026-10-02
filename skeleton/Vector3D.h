@@ -1,3 +1,4 @@
+#pragma once
 #include "foundation/PxMat33.h"
 #include <vector>
 #include <cmath>
@@ -70,6 +71,15 @@ public:
 		res.x = x * escalar;
 		res.y = y * escalar;
 		res.z = z * escalar;
+		return res;
+	}
+
+	Vector3D operator*(int const& b) const // Por un escalar
+	{
+		Vector3D res;
+		res.x = x * b;
+		res.y = y * b;
+		res.z = z * b;
 		return res;
 	}
 
