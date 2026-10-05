@@ -9,7 +9,7 @@ class Vector3D
 {
 public:
 	float x, y, z;
-	Vector3D(int X = 0, int Y = 0, int Z = 0) : x(X), y(Y), z(Z) {};
+	Vector3D(float X = 0.0f, float Y = 0.0f, float Z = 0.0f) : x(X), y(Y), z(Z) {};
 	Vector3D(physx::PxVec3 val) : x (val.x), y(val.y), z(val.z) {};
 
 	float magnitude() const // módulo
@@ -74,7 +74,7 @@ public:
 		return res;
 	}
 
-	Vector3D operator*(int const& b) const // Por un escalar
+	Vector3D operator*(float const& b) const // Por un escalar
 	{
 		Vector3D res;
 		res.x = x * b;

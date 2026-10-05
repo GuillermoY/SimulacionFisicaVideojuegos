@@ -39,7 +39,7 @@ private:
     float vReal = 250.0f;
     float vSim=80.0f;
     float gSim=0;
-    float gReal = -9000.81f;
+    float gReal = -9.81f;
     vector<Particle*> particulas;
 
 };

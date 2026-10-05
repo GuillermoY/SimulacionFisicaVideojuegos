@@ -23,5 +23,4 @@ private:
     Vector3 pPos;// previa posición
 
     float mass;
-    float simMass;
 };
