@@ -25,9 +25,21 @@ public:
 
     void shoot(unsigned char key, const physx::PxTransform& camera);
 private:
-    //P0
+    //P1.2 Opcional
     physx::PxTransform m_transform;
     RenderItem* m_renderItem{ nullptr };
+
+    physx::PxTransform m_transformSuelo;
+    RenderItem* m_renderItemSuelo{ nullptr };
+
+    physx::PxTransform m_transformSosten;
+    RenderItem* m_renderItemSosten{ nullptr };
+
+    physx::PxTransform m_transformDiana;
+    RenderItem* m_renderItemDiana{ nullptr };
+
+    physx::PxTransform m_transformDianaCentro;
+    RenderItem* m_renderItemDianaCentro{ nullptr };
 
     //P1.1
     Particle* m_renderParticle1{ nullptr };

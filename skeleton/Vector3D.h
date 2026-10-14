@@ -41,11 +41,6 @@ public:
 		return res;
 	}
 
-	Vector3D operator=(Vector3D const& b) const
-	{
-		return b;
-	}
-
 	Vector3D operator+(Vector3D const& b) const
 	{
 		Vector3D res;
@@ -91,6 +86,19 @@ public:
 		
 		return *this;
 	}
+
+	//Vector3D operator=(Vector3D const& b) const
+	//{
+	//	return b;
+	//}
+
+	//Vector3D& operator=(Vector3D& const b)
+	//{
+	//	x = b.x;
+	//	y = b.y;
+	//	z = b.z;
+	//	return *this;
+	//}
 
 	operator physx::PxVec3() const
 	{

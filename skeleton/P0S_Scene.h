@@ -2,7 +2,6 @@
 
 #include "Scene.h"
 #include "RenderUtils.hpp"
-#include "Particle.h"
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -30,6 +29,4 @@ private:
     physx::PxTransform m_transform3;
     RenderItem* m_renderItem3{ nullptr };
 
-    //P1.1
-    Particle* m_renderParticle1{ nullptr };
 };
