@@ -1,13 +1,19 @@
 #include "Particle.h"
 
 Particle::Particle(Vector3D Pos, Vector3D Vel, float masa, Vector3D accel, 
-    Vector4 color, const physx::PxGeometry& geo)
+    Vector4 color, const physx::PxGeometry& geo, int typeVel)
     : vel(Vel),
     pose(physx::PxTransform(Pos)),
     pPos(Pos),
     ac(accel),
-    mass(masa)
+    mass(masa),
+    typeVel(typeVel)
 {
+    clearAccForce();
+    inv_mass = 0;
+    if (mass != 0)
+        inv_mass = 1 / mass;
+
     physx::PxShape* shape = CreateShape(geo);
 
     renderItem = new RenderItem(shape, &pose,color);
@@ -16,20 +22,28 @@ Particle::Particle(Vector3D Pos, Vector3D Vel, float masa, Vector3D accel,
 
 void Particle::integrate(double t)
 {
-    // Parte 1
-    // pose.p += vel * t;
-    //ac = vel * t;
+    if (mass <= 0.0f)
+        return;
 
-    // Parte 2 y 3
-    pose.p += vel * t;
-    vel = (vel + ac * t);// *pow(d, t);
+    if (typeVel == 0)    // Parte 1.01
+    {
+        pose.p += vel * t;
+        ac = vel * t;
+    }
+    else if (typeVel == 1) // Parte 1.02 y 1.03
+    {
+        pose.p += vel * t;
+        vel = (vel + (ac + accAccel) * t);// *pow(d, t);
+    }
+    else if (typeVel == 2)    // Parte 1.04: Verlet
+    {
+        Vector3 posActual = pose.p;
+        Vector3 posNueva = posActual * 2.0f - pPos + (ac + accAccel) * t * t;
 
-    // Parte 4: Verlet
-    //Vector3 posA = pose.p;
-    //posA = pose.p * 2.0f - pPos + ac * t * t;
-    //pPos = pose.p;
-    //vel = (pose.p - pPos) / (2.0f * t);
-    //pose.p = posA;
+        vel = (posNueva - pPos) / (2.0f * t);
+        pPos = posActual;
+        pose.p = posNueva;
+    }
 
     // P2
     tiempoVida -= t;
@@ -40,6 +54,8 @@ void Particle::integrate(double t)
         pose.p.y > 50.0f || pose.p.y < -50.0f ||
         pose.p.z > 50.0f || pose.p.z < -50.0f)
         canBeDeleted = true;
+
+    clearAccForce();
 }
 
 Particle::~Particle()
@@ -49,4 +65,14 @@ Particle::~Particle()
         renderItem->release();
         renderItem = nullptr;
     }
+}
+
+//P3
+void Particle::applyForce(Vector3D force)
+{
+    if (mass <= 0.0f)
+        return;
+
+    // Leyes del Movimiento de Newton
+    accAccel += force * inv_mass; 
 }

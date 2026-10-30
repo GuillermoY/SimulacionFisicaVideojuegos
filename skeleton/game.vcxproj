@@ -262,10 +262,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="ExplosionForceGenerator.h" />
+    <ClCompile Include="GravForceGenerator.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="P0S_Scene.cpp" />
     <ClCompile Include="P1S_Scene.cpp" />
     <ClCompile Include="P2S_Scene.cpp" />
+    <ClCompile Include="P3S_Scene.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
@@ -279,9 +282,11 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="EmptyScene.h" />
+    <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="P0S_Scene.h" />
     <ClInclude Include="P1S_Scene.h" />
     <ClInclude Include="P2S_Scene.h" />
+    <ClInclude Include="P3S_Scene.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="RenderUtils.hpp" />
@@ -289,6 +294,8 @@
     <ClInclude Include="Render\Render.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="WhirlWindForceGenerator.h" />
+    <ClInclude Include="WindForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

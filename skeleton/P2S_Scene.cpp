@@ -21,21 +21,22 @@ void P2S_Scene::init() {
     sistemas.push_back(
         new ParticleSystem(
             10.0f, 30.0f,
-            0.0f,
+            { 0.0f ,0.0f,0.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(-15.0f, -10.0f, 0.0f),
             Vector4(1.0f, 0.25f, 0.0f, 1.0f)
         )
     );
 
-    // Niebla: partículas lentas y con poca variación
+    // Niebla: partículas lentas y con poca variación, sin influencia de la gravedad
     sistemas.push_back(
         new ParticleSystem(
-            0.0f, 10.0f,
-            50.0f,
+            0.0f, 1.0f,
+            { 50.0f ,50.0f, 50.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(0.0f, 40.0f, 0.0f),
-            Vector4(0.75f, 0.80f, 0.85f, 0.25f)
+            Vector4(0.75f, 0.80f, 0.85f, 0.25f),
+            0
         )
     );
 
@@ -43,8 +44,8 @@ void P2S_Scene::init() {
     sistemas.push_back(
         new ParticleSystem(
             20.0f, 30.0f,
-            0.0f,
-            Vector3D(-0.5f, -1.0f, 0.0f),
+            { 0.0f ,0.0f,0.0f },
+            Vector3D(-1.0f, 0.1f, 0.0f),
             Vector3D(15.0f, 30.0f, 0.0f),
             Vector4(0.2f, 0.5f, 1.0f, 1.0f)
         )
