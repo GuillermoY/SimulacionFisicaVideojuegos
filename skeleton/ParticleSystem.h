@@ -13,9 +13,21 @@ using namespace std;
 
 class ParticleSystem
 {
+
 public:
+	enum class ForceType
+	{
+		NONE,
+		GRAVITY,
+		WIND,
+		WHIRLWIND,
+		EXPLOSION
+	};
+
+
 	ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
-		Vector4 color = { 1.0f, 0.0f, 0.5f, 1.0f }, float infGrav=1);
+		Vector4 color = { 1.0f, 0.0f, 0.5f, 1.0f }, const physx::PxGeometry& geo = physx::PxSphereGeometry(2.0f),
+		ForceType type = ForceType::GRAVITY);
 	~ParticleSystem();
 
 	void integrate(double t);
@@ -23,8 +35,21 @@ public:
 	void switchState(); // Intercambia entre estar parado o continuar
 	bool isOn() { return !isStop; };
 
+	void changeColor(Vector4 newCol) { color = newCol; }; // nuevo color a las nuevas partículas generadas después del cambio
+
 	//P3
 	void changeMass(float mass) { pMass += mass; };
+
+	void setNExplParts(int n) { nExplParts = n; };
+
+	void setGeneratorType(ForceGenerator* newForceGenerator, ForceType newType)
+	{
+		delete forceGen;
+
+		typeF = newType;
+
+		forceGen = newForceGenerator;
+	}
 private:
 	float velMax;
 	float velMin;
@@ -49,10 +74,16 @@ private:
 	bool isStop = true;
 
 	//P3
-	float pMass=1.0f;
+	float pMass = 1.0f;
+	physx::PxGeometryHolder geoPart;
 
-	GravForceGenerator* gravGenerator = nullptr;
-	WindForceGenerator* windGenerator = nullptr;
-	WindForceGenerator* whirlWindGenerator = nullptr;
-	ExplosionForceGenerator* explosionGenerator = nullptr;
+	ForceGenerator* forceGen = new GravForceGenerator(Vector3D{ 0.0f,-10.0f ,0.0f });
+
+	void applyForces(Particle* particle);
+	void generatePart();
+	void updatePart(float t);
+
+	ForceType typeF;
+	bool activeExpl = false;
+	int nExplParts = 500;
 };

@@ -1,40 +1,53 @@
 #include "ParticleSystem.h"
 
 ParticleSystem::ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
-	Vector4 color, float infGrav)
+	Vector4 color, const physx::PxGeometry& geo, ForceType type)
 	: velMax(velMax), velMin(velMin), distPos(distPos), dir(dir), pos(pos), color(color),
-	infGrav(infGrav)
+	geoPart(physx::PxGeometryHolder(geo)), typeF(type)
 {
-
-	gravGenerator = new GravForceGenerator(Vector3D{ 0.0f,-10.0f ,0.0f });
-	windGenerator = new WindForceGenerator(Vector3D{ 1.0f,10.0f ,1.0f }, 2);
-	whirlWindGenerator = new WhirlWindForceGenerator(
-		Vector3D(10, 100, 10),
-		2.0f,                   
-		Vector3D(-20, 0, -20),  
-		Vector3D(20, 40, 20)
-	);
-	explosionGenerator = new ExplosionForceGenerator(
-		500.0f,
-		25.0f,
-		1.0f,
-		Vector3D(10, 0, 10)
-	);
+	if (type == ForceType::NONE)
+		forceGen = nullptr;
 	distr = 0; // 2 tipos, 0 uniforme o 1 Gaussiana
 }
 
 
 void ParticleSystem::integrate(double t)
 {
+	if (isStop)
+		return;
+
+	if (typeF == ForceType::EXPLOSION)
+	{
+		if (!activeExpl)
+		{
+			ExplosionForceGenerator* explosion = static_cast<ExplosionForceGenerator*>(forceGen);
+
+			explosion->reinicio();
+
+			activeExpl = true;
+
+			for (int i = 0; i < nExplParts; ++i)
+				generatePart();
+		}
+
+		updatePart(t);
+		return;
+	}
+
+	generatePart();
+	updatePart(t);
+}
+void ParticleSystem::generatePart()
+{
 	Vector3D vel;
 	Vector3D posA;
 
-	const float velMedia = (velMin + velMax) /2;
+	const float velMedia = (velMin + velMax) / 2;
 
 	if (distr == 0)
 	{
 		// Distribución uniforme entre -1 y 1
-		const float velDif = (velMax - velMin)/2;
+		const float velDif = (velMax - velMin) / 2;
 		vel = {
 			dir.x * velMedia + uniforme(rng) * velDif,
 			dir.y * velMedia + uniforme(rng) * velDif,
@@ -57,21 +70,24 @@ void ParticleSystem::integrate(double t)
 				pos.y + gaussiana(rng) * distPos.y,
 				pos.z + gaussiana(rng) * distPos.z };
 	}
-	particles.push_back(new Particle(posA, vel, pMass, 0, color));
+
+	particles.push_back(new Particle(posA, vel, pMass, 0, color, geoPart.any()));
+}
+
+void ParticleSystem::updatePart(float t)
+{
 	auto it = particles.begin();
-	if(explosionGenerator)
-		explosionGenerator->integrate(t);
+
+	if (forceGen && typeF == ForceType::EXPLOSION)	
+		forceGen->integrate(t);
+
 	while (it != particles.end())
 	{
 		Particle* p = *it;
-		//if (gravGenerator)
-		//	gravGenerator->applyForceTo(p);
-		if (windGenerator)
-			windGenerator->applyForceTo(p);
-		//if (whirlWindGenerator)
-		//	whirlWindGenerator->applyForceTo(p);
-		//if (explosionGenerator)
-		//	explosionGenerator->applyForceTo(p);
+
+		if (forceGen)
+			forceGen->applyForceTo(p);
+
 		p->integrate(t);
 
 		if (p->canDelete())
@@ -86,6 +102,7 @@ void ParticleSystem::integrate(double t)
 	}
 }
 
+
 ParticleSystem::~ParticleSystem()
 {
 	for (Particle* p : particles)
@@ -94,17 +111,9 @@ ParticleSystem::~ParticleSystem()
 	}
 	particles.clear();
 	
-	if (gravGenerator)
-		delete gravGenerator;
+	delete forceGen;
+	forceGen = nullptr;
 
-	if (windGenerator)
-		delete windGenerator;
-	
-	if (whirlWindGenerator)
-		delete whirlWindGenerator;
-
-	if (explosionGenerator)
-		delete explosionGenerator;
 }
 
 void ParticleSystem::switchState()
@@ -117,5 +126,7 @@ void ParticleSystem::switchState()
 			delete p;
 		}
 		particles.clear();
+
+		activeExpl = false;
 	}
 }

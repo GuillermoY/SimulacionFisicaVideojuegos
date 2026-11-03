@@ -36,7 +36,8 @@ void P2S_Scene::init() {
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(0.0f, 40.0f, 0.0f),
             Vector4(0.75f, 0.80f, 0.85f, 0.25f),
-            0
+            physx::PxSphereGeometry(1.0f),
+            ParticleSystem::ForceType::NONE
         )
     );
 

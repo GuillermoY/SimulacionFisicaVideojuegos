@@ -50,10 +50,10 @@ void Particle::integrate(double t)
     if (tiempoVida <= 0)
         canBeDeleted = true;
 
-    if (pose.p.x > 30.0f || pose.p.x < -30.0f ||
+    /*if (pose.p.x > 30.0f || pose.p.x < -30.0f ||
         pose.p.y > 50.0f || pose.p.y < -50.0f ||
         pose.p.z > 50.0f || pose.p.z < -50.0f)
-        canBeDeleted = true;
+        canBeDeleted = true;*/
 
     clearAccForce();
 }

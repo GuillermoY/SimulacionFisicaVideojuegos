@@ -47,4 +47,5 @@ private:
 
     // P3
     ForceGenerator* generador;
+    int generadorActual = -1;
 };

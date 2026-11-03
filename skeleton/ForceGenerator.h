@@ -9,4 +9,6 @@ public:
 	virtual ~ForceGenerator() = default;
 
 	virtual void applyForceTo(Particle* p)=0;
+
+	virtual void integrate(double dt) {};
 };
