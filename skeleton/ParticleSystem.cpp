@@ -3,8 +3,19 @@
 ParticleSystem::ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
 	Vector4 color, const physx::PxGeometry& geo, ForceType type)
 	: velMax(velMax), velMin(velMin), distPos(distPos), dir(dir), pos(pos), color(color),
-	geoPart(physx::PxGeometryHolder(geo)), typeF(type)
+	geoPart(physx::PxGeometryHolder(geo)), typeF(type), pModelo(nullptr)
 {
+	if (type == ForceType::NONE)
+		forceGen = nullptr;
+	distr = 0; // 2 tipos, 0 uniforme o 1 Gaussiana
+}
+
+ParticleSystem::ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
+	Particle* model, ForceType type)
+	: velMax(velMax), velMin(velMin), distPos(distPos), dir(dir), pos(pos), typeF(type), pModelo(new Particle(*model))
+{
+	pModelo->changeDeletability(false);
+	hasP = true;
 	if (type == ForceType::NONE)
 		forceGen = nullptr;
 	distr = 0; // 2 tipos, 0 uniforme o 1 Gaussiana
@@ -71,7 +82,21 @@ void ParticleSystem::generatePart()
 				pos.z + gaussiana(rng) * distPos.z };
 	}
 
-	particles.push_back(new Particle(posA, vel, pMass, 0, color, geoPart.any()));
+	if (hasP)
+	{
+		Particle* p = new Particle(*pModelo, true);
+		//p->defineLimits(maxLimt, minLimt);
+		p->setPos(posA);
+		p->setVel(vel);
+		p->defineLimits(maxLimt, minLimt);
+		particles.push_back(p);
+	}
+	else
+	{
+		Particle* p = new Particle(posA, vel, pMass, 0, color, geoPart.any());
+		p->defineLimits(maxLimt,minLimt);
+		particles.push_back(p);
+	}
 }
 
 void ParticleSystem::updatePart(float t)
@@ -110,7 +135,7 @@ ParticleSystem::~ParticleSystem()
 		delete p;
 	}
 	particles.clear();
-	
+	delete pModelo;
 	delete forceGen;
 	forceGen = nullptr;
 

@@ -28,6 +28,8 @@ public:
 	ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
 		Vector4 color = { 1.0f, 0.0f, 0.5f, 1.0f }, const physx::PxGeometry& geo = physx::PxSphereGeometry(2.0f),
 		ForceType type = ForceType::GRAVITY);
+	ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos, Particle* p, 
+		ForceType type = ForceType::GRAVITY);
 	~ParticleSystem();
 
 	void integrate(double t);
@@ -50,6 +52,12 @@ public:
 
 		forceGen = newForceGenerator;
 	}
+	void changeDistr() {
+		if (distr == 0)distr = 1;
+		else distr = 0;
+	};
+	void defineLimits(Vector3 maxLimit, Vector3 minLimit) { maxLimt = maxLimit; minLimt = minLimit; }
+
 private:
 	float velMax;
 	float velMin;
@@ -75,15 +83,19 @@ private:
 
 	//P3
 	float pMass = 1.0f;
+	Vector3 maxLimt = { 30.0f,50.0f,50.0f };
+	Vector3 minLimt = { -30.0f,-50.0f,-50.0f };
 	physx::PxGeometryHolder geoPart;
 
 	ForceGenerator* forceGen = new GravForceGenerator(Vector3D{ 0.0f,-10.0f ,0.0f });
 
-	void applyForces(Particle* particle);
 	void generatePart();
 	void updatePart(float t);
 
 	ForceType typeF;
 	bool activeExpl = false;
 	int nExplParts = 500;
+
+	Particle* pModelo;
+	bool hasP=false;
 };

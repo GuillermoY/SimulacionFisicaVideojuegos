@@ -16,46 +16,59 @@ void P3S_Scene::init() {
     m_renderItemSuelo = new RenderItem(shapeSuelo, &m_transformSuelo, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 
     // FUERZAS
+    // Esta será para gravedad
+    Particle* p1 = new Particle({}, {}, 40.0f, {}, { 0.75f, 0.80f, 0.85f, 0.25f }, PxSphereGeometry(1.0f), false);
+    particulas.push_back(p1);
     sistemas.push_back(
         new ParticleSystem(
             2.0f, 4.0f,
             { 50.0f ,50.0f, 50.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(0.0f, 40.0f, 0.0f),
-            Vector4(0.75f, 0.80f, 0.85f, 0.25f)
+            p1
         )
     );    
-    
+    // Esta será para Viento
+    Particle* p2 = new Particle({}, {}, 5.0f, {}, { 0.75f, 0.80f, 0.85f, 0.25f }, PxSphereGeometry(1.0f), false);
+    particulas.push_back(p2);
     sistemas.push_back(
         new ParticleSystem(
-            0.0f, 1.0f,
+            0.0f, 1.0f, 
             { 50.0f ,30.0f, 50.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(0.0f, 40.0f, 0.0f),
-            Vector4(0.75f, 0.80f, 0.85f, 0.25f)
+            p2
         )
     );    
-    
+    // Esta será para Torbellino
+    Particle* p3 = new Particle({}, {}, 5.0f, {}, { 0.1f, 0.1f, 0.85f, 0.6f }, PxSphereGeometry(1.0f), false);
+    particulas.push_back(p3); 
     sistemas.push_back(
         new ParticleSystem(
-            0.0f, 1.0f,
+            0.0f, 1.0f, 
             { 50.0f ,10.0f, 50.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(0.0f, 40.0f, 0.0f),
-            Vector4(0.1f, 0.1f, 0.85f, 0.6f)
+            p3
         )
     );    
-    
+    sistemas[2]->defineLimits({ 1000.0f,1000.0f,1000.0f },
+        { -1000.0f,-1000.0f,-1000.0f });
+    // Esta será para Explosión
+    Particle* p4 = new Particle({}, {}, 1.0f, {}, { 0.8f, 0.8f, 0.1f, 0.8f }, PxSphereGeometry(1.0f), false);
+    particulas.push_back(p4);
     sistemas.push_back(
         new ParticleSystem(
-            0.0f, 1.0f,
+            0.0f, 1.0f, 
             { 50.0f ,50.0f, 50.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(0.0f, 40.0f, 0.0f),
-            Vector4(0.8f, 0.8f, 0.1f, 0.8f)
+            p4
         )
     );
     sistemas[3]->setNExplParts(1000);
+    sistemas[3]->defineLimits({ 1000.0f,1000.0f,1000.0f },
+                                { -1000.0f,-1000.0f,-1000.0f });
 
     // Configuración de fuerzas
     sistemas[0]->setGeneratorType(
@@ -128,8 +141,10 @@ void P3S_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
     }
     else if (key == '<')
     {
-        if (generadorActual>0)
+        if (generadorActual > 0)
             generadorActual--;
+        else
+            generadorActual = 0;
 
         for (int i = 0; i < sistemas.size(); ++i)
         {

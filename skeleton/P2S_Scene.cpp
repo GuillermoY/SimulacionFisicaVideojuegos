@@ -18,15 +18,26 @@ void P2S_Scene::init() {
 
     //P2
     // Fuego: partículas que ascienden desde un punto
+    Particle* pF = new Particle({}, {}, 1.0f, {}, { 1.0f, 0.25f, 0.0f, 1.0f }, PxSphereGeometry(1.0f), false);
+    particulas.push_back(pF);
     sistemas.push_back(
         new ParticleSystem(
             10.0f, 30.0f,
             { 0.0f ,0.0f,0.0f },
             Vector3D(0.0f, 1.0f, 0.0f),
             Vector3D(-15.0f, -10.0f, 0.0f),
-            Vector4(1.0f, 0.25f, 0.0f, 1.0f)
+            pF
         )
     );
+    //sistemas.push_back(
+    //    new ParticleSystem(
+    //        10.0f, 30.0f,
+    //        { 0.0f ,0.0f,0.0f },
+    //        Vector3D(0.0f, 1.0f, 0.0f),
+    //        Vector3D(-15.0f, -10.0f, 0.0f),
+    //        Vector4(1.0f, 0.25f, 0.0f, 1.0f)
+    //    )
+    //);
 
     // Niebla: partículas lentas y con poca variación, sin influencia de la gravedad
     sistemas.push_back(

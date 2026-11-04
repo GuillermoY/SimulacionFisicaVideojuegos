@@ -12,9 +12,8 @@ void P1S_Scene::init() {
     
     physx::PxShape* shape3 = CreateShape(physx::PxSphereGeometry(2.0f));
     m_renderParticle1 = new Particle(Vector3(0, 0, 0), Vector3(1, 0, 0), 1);
-    particulas.push_back(m_renderParticle1);
     //P1.2
-    escaladoSimulado();
+
 
     //Opcional
 
@@ -42,9 +41,9 @@ void P1S_Scene::update(double dt) {
     m_renderParticle1->integrate(dt);
     
     // Lógica/Integración del alumno (por ejemplo, movimiento simple)
-    for (Particle* part : particulas)
+    for (Proyectil* proj : proyectiles)
     {
-        part->integrate(dt);
+        proj->integrate(dt);
     }
 }
 
@@ -56,33 +55,36 @@ void P1S_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
     if (key == '+')
     {
         cout << "mas masa" << "\n";
-        mReal += 0.1f;
-        escaladoSimulado();
-
+        for (auto proy : proyectiles)
+            if (proy)
+                proy->setMass(proy->getMass() + 0.1f);
     }
     else if (key == '-')
     {
         cout << "menos masa" << "\n";
-        mReal -= 0.001f;
-        if (mReal < 0.001f)
-            mReal = 0.1f;
-        escaladoSimulado();
+        for (auto proy : proyectiles)
+        {
+            proy->setMass(proy->getMass() - 0.1f);
+            if (proy->getMass() < 0)
+                if (proy)
+                    proy->setMass(0.1f);
+        }        
     }
 
     if (key == 'M')
     {
         cout << "mas vel" << "\n";
-        vReal += 10.0f;
-        escaladoSimulado();
+        for (auto proy : proyectiles)
+            if (proy)
+                proy->setVel(proy->getVel() + 10.0f);
     }
     else if (key == 'm')
     {
         cout << "menos vel" << "\n";
-        vReal -= 10.0f;
-
-        if (vReal < 10.0f)
-            vReal = 10.0f;
-        escaladoSimulado();
+        for (auto proy : proyectiles)
+            if (proy)
+                proy->setVel(proy->getVel() - 10.0f);
+        
     }
 
     if (key == 'c' || key == 'b')
@@ -97,38 +99,32 @@ void P1S_Scene::shoot(unsigned char key, const physx::PxTransform& camera)
     Vector3D posDir = camera.q.rotate(physx::PxVec3(0.0f, 0.0f, -1.0f));
     posDir = posDir.normalize();
 
-    Vector3D vel = posDir * vSim;
-    Vector3D ac(0.0f, gSim, 0.0f);
-
     Particle* nPart;
     if (key == 'b')
     {
-        nPart = new Particle(posIni, vel, mSim, ac, { 1.0f, 1.0f, 1.0f, 1.0f }, physx::PxBoxGeometry(2.0f, 2.0f, 2.0f));
+        proyectiles.push_back(new Proyectil(posIni, posDir, 250.0f, Proyectil::ProjectileType::BOX));
     }
     else
     {
-        nPart = new Particle(posIni, vel, mSim, ac);
+        proyectiles.push_back(new Proyectil(posIni, posDir, 250.0f, Proyectil::ProjectileType::SPHERE));
     }
-    particulas.push_back(nPart);
 }
 
-void P1S_Scene::escaladoSimulado()
-{
-    mSim = mReal * (vReal / vSim) * (vReal / vSim);
-    gSim = gReal * (vSim / vReal) * (vSim / vReal);
-}
 
 void P1S_Scene::cleanup() {
     if (m_renderItem) {
         m_renderItem->release(); // Deregistra y destruye el item
         m_renderItem = nullptr;
     }
-    for (Particle* part : particulas)
+    for (Proyectil* proj : proyectiles)
     {
-        delete part;
+        delete proj;
     }
-    particulas.clear();
+    proyectiles.clear();
     
+    delete m_renderParticle1;
+    m_renderParticle1=nullptr;
+
     if (m_renderItemSuelo) {
         m_renderItemSuelo->release(); // Deregistra y destruye el item
         m_renderItemSuelo = nullptr;

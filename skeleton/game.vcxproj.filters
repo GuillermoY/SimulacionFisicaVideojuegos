@@ -21,6 +21,7 @@
     <ClCompile Include="P3S_Scene.cpp" />
     <ClCompile Include="GravForceGenerator.h" />
     <ClCompile Include="ExplosionForceGenerator.h" />
+    <ClCompile Include="Proyectil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -44,6 +45,7 @@
     <ClInclude Include="P3S_Scene.h" />
     <ClInclude Include="WindForceGenerator.h" />
     <ClInclude Include="WhirlWindForceGenerator.h" />
+    <ClInclude Include="Proyectil.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -3,6 +3,7 @@
 #include "Scene.h"
 #include "RenderUtils.hpp"
 #include "Particle.h"
+#include "Proyectil.h"
 #include <iostream>
 #include <vector>
 
@@ -20,8 +21,6 @@ public:
     void keyPress(unsigned char key, const physx::PxTransform& camera) override;
 
     void cleanup() override;
-
-    void escaladoSimulado();
 
     void shoot(unsigned char key, const physx::PxTransform& camera);
 private:
@@ -45,13 +44,7 @@ private:
     Particle* m_renderParticle1{ nullptr };
 
     //P1.2
-    float mReal = 0.005f;
-    float mSim=0;
 
-    float vReal = 250.0f;
-    float vSim=80.0f;
-    float gSim=0;
-    float gReal = -9.81f;
-    vector<Particle*> particulas;
+    vector<Proyectil*> proyectiles;
 
 };
