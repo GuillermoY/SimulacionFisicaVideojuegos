@@ -60,7 +60,7 @@ private:
     // P3
     float inv_mass;
 
-    const physx::PxGeometry& geo;
+    const physx::PxGeometryHolder geo;
 
     Vector3D accAccel;
     void clearAccForce() { accAccel = { 0,0,0 }; };

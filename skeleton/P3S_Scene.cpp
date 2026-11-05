@@ -40,6 +40,8 @@ void P3S_Scene::init() {
             p2
         )
     );    
+    sistemas[1]->defineLimits({ 1000.0f,1000.0f,1000.0f },
+        { -1000.0f,-1000.0f,-1000.0f });
     // Esta será para Torbellino
     Particle* p3 = new Particle({}, {}, 5.0f, {}, { 0.1f, 0.1f, 0.85f, 0.6f }, PxSphereGeometry(1.0f), false);
     particulas.push_back(p3); 
@@ -70,41 +72,48 @@ void P3S_Scene::init() {
     sistemas[3]->defineLimits({ 1000.0f,1000.0f,1000.0f },
                                 { -1000.0f,-1000.0f,-1000.0f });
 
-    // Configuración de fuerzas
-    sistemas[0]->setGeneratorType(
-        new GravForceGenerator(
-            Vector3D(0, -9.8f, 0)),
+    // Configuración de fuerzas 0 gravedad 1 viento 2 torbellino 3 explosión
+    generadores.push_back(new GravForceGenerator(Vector3D(0, -9.8f, 0)));
+    generadores.push_back(new WindForceGenerator(
+        Vector3D(15, 0, 0),
+        2.0f,
+        Vector3D(-50, -30, -50),
+        Vector3D(50, 50, 50)));
+    generadores.push_back(new WhirlWindForceGenerator(
+        Vector3D(10, 0, 0),
+        1.5f,
+        Vector3D(-50, -30, -50),
+        Vector3D(50, 50, 50),
+        Vector3D(10, 0, 0)));
+    generadores.push_back(new ExplosionForceGenerator(
+        50.0f,
+        600.0f,
+        2.0f,
+        Vector3D(30, 30, 30)));
+
+    sistemas[0]->addGeneratorType(
+        generadores[0],
         ParticleSystem::ForceType::GRAVITY
     );
 
-    sistemas[1]->setGeneratorType(
-        new WindForceGenerator(
-            Vector3D(15, 0, 0),
-            2.0f,
-            Vector3D(-50, -30, -50),
-            Vector3D(50, 50, 50)),
+    sistemas[1]->addGeneratorType(
+        generadores[1],
         ParticleSystem::ForceType::WIND
     );
 
-    sistemas[2]->setGeneratorType(
-        new WhirlWindForceGenerator(
-            Vector3D(10, 0, 0),
-            1.5f,
-            Vector3D(-50, -30, -50),
-            Vector3D(50, 50, 50),
-            Vector3D(10, 0, 0)),
+    sistemas[2]->addGeneratorType(
+        generadores[2],
         ParticleSystem::ForceType::WHIRLWIND
     );
 
-    sistemas[3]->setGeneratorType(
-        new ExplosionForceGenerator(
-            50.0f,
-            600.0f,
-            2.0f,
-            Vector3D(30, 30, 30)),
+    sistemas[3]->addGeneratorType(
+        generadores[3],
         ParticleSystem::ForceType::EXPLOSION
     );
-
+    sistemas[3]->addGeneratorType(
+        generadores[2],
+        ParticleSystem::ForceType::WHIRLWIND
+    );
     
 }
 
@@ -193,5 +202,8 @@ void P3S_Scene::cleanup() {
     }
     sistemas.clear();
 
-    //delete generador;
+    for (ForceGenerator* generador : generadores)
+    {
+        delete generador;
+    }
 }

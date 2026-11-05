@@ -90,9 +90,17 @@ void P2S_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
     {
         sistemas[1]->switchState();
     }
-    else if (key == 'l')
+    else if (key == 'c')
     {
         sistemas[2]->switchState();
+    }
+
+    if (key == 'o')
+    {
+        for (ParticleSystem* partS : sistemas)
+        {
+            partS->changeDistr();
+        }
     }
 }
 

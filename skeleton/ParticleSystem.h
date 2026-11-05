@@ -44,13 +44,11 @@ public:
 
 	void setNExplParts(int n) { nExplParts = n; };
 
-	void setGeneratorType(ForceGenerator* newForceGenerator, ForceType newType)
+	void addGeneratorType(ForceGenerator* newForceGenerator, ForceType newType)
 	{
-		delete forceGen;
+		typeF.push_back(newType);
 
-		typeF = newType;
-
-		forceGen = newForceGenerator;
+		forceGen.push_back(newForceGenerator);
 	}
 	void changeDistr() {
 		if (distr == 0)distr = 1;
@@ -87,12 +85,12 @@ private:
 	Vector3 minLimt = { -30.0f,-50.0f,-50.0f };
 	physx::PxGeometryHolder geoPart;
 
-	ForceGenerator* forceGen = new GravForceGenerator(Vector3D{ 0.0f,-10.0f ,0.0f });
+	vector<ForceGenerator*> forceGen;
 
 	void generatePart();
 	void updatePart(float t);
 
-	ForceType typeF;
+	vector<ForceType> typeF;
 	bool activeExpl = false;
 	int nExplParts = 500;
 

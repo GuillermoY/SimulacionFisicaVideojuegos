@@ -1,12 +1,12 @@
 #include "Particle.h"
-
+#include <iostream>
 Particle::Particle(Vector3D Pos, Vector3D Vel, float masa, Vector3D accel, 
     Vector4 color, const physx::PxGeometry& geom, bool render, int typeVel)
     : vel(Vel), typeVel(typeVel),
     pose(physx::PxTransform(Pos)), pPos(Pos),
     ac(accel),
     mass(masa),
-    geo(geom),
+    geo(physx::PxGeometryHolder(geom)),
     color(color)
 {
     clearAccForce();
@@ -17,7 +17,7 @@ Particle::Particle(Vector3D Pos, Vector3D Vel, float masa, Vector3D accel,
     renderItem = nullptr;
 
     if (render) {
-        physx::PxShape* shape = CreateShape(geo);
+        physx::PxShape* shape = CreateShape(geom);
         renderItem = new RenderItem(shape, &pose, color);
     }
 
@@ -38,7 +38,7 @@ Particle::Particle(const Particle& p, bool render) :
     renderItem = nullptr;
     if (render)
     {
-        physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(2.0f));
+        physx::PxShape* shape = CreateShape(p.geo.any());
         renderItem = new RenderItem(shape, &pose, p.color);
     }
     d = 0.96;

@@ -3,21 +3,21 @@
 ParticleSystem::ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
 	Vector4 color, const physx::PxGeometry& geo, ForceType type)
 	: velMax(velMax), velMin(velMin), distPos(distPos), dir(dir), pos(pos), color(color),
-	geoPart(physx::PxGeometryHolder(geo)), typeF(type), pModelo(nullptr)
+	geoPart(physx::PxGeometryHolder(geo)), pModelo(nullptr)
 {
 	if (type == ForceType::NONE)
-		forceGen = nullptr;
+		forceGen.clear();
 	distr = 0; // 2 tipos, 0 uniforme o 1 Gaussiana
 }
 
 ParticleSystem::ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
 	Particle* model, ForceType type)
-	: velMax(velMax), velMin(velMin), distPos(distPos), dir(dir), pos(pos), typeF(type), pModelo(new Particle(*model))
+	: velMax(velMax), velMin(velMin), distPos(distPos), dir(dir), pos(pos), pModelo(new Particle(*model))
 {
 	pModelo->changeDeletability(false);
 	hasP = true;
 	if (type == ForceType::NONE)
-		forceGen = nullptr;
+		forceGen.clear();
 	distr = 0; // 2 tipos, 0 uniforme o 1 Gaussiana
 }
 
@@ -27,22 +27,22 @@ void ParticleSystem::integrate(double t)
 	if (isStop)
 		return;
 
-	if (typeF == ForceType::EXPLOSION)
+	for (int i = 0; i < forceGen.size(); ++i)
 	{
-		if (!activeExpl)
+		if (typeF[i] == ForceType::EXPLOSION)
 		{
-			ExplosionForceGenerator* explosion = static_cast<ExplosionForceGenerator*>(forceGen);
+			if (!activeExpl)
+			{
+				ExplosionForceGenerator* explosion = static_cast<ExplosionForceGenerator*>(forceGen[i]);
 
-			explosion->reinicio();
+				explosion->reinicio();
 
-			activeExpl = true;
+				activeExpl = true;
 
-			for (int i = 0; i < nExplParts; ++i)
-				generatePart();
+				for (int i = 0; i < nExplParts; ++i)
+					generatePart();
+			}
 		}
-
-		updatePart(t);
-		return;
 	}
 
 	generatePart();
@@ -102,16 +102,23 @@ void ParticleSystem::generatePart()
 void ParticleSystem::updatePart(float t)
 {
 	auto it = particles.begin();
-
-	if (forceGen && typeF == ForceType::EXPLOSION)	
-		forceGen->integrate(t);
+	int i = 0;
+	for (ForceGenerator* f : forceGen)
+	{
+		if (f && typeF[i] == ForceType::EXPLOSION)
+			f->integrate(t);
+		++i;
+	}
 
 	while (it != particles.end())
 	{
 		Particle* p = *it;
 
-		if (forceGen)
-			forceGen->applyForceTo(p);
+		for (ForceGenerator* f : forceGen)
+		{
+			if (f)
+				f->applyForceTo(p);
+		}
 
 		p->integrate(t);
 
@@ -136,8 +143,11 @@ ParticleSystem::~ParticleSystem()
 	}
 	particles.clear();
 	delete pModelo;
-	delete forceGen;
-	forceGen = nullptr;
+	for (ForceGenerator* f : forceGen)
+	{
+		delete f;
+	}
+	forceGen.clear();
 
 }
 

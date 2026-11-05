@@ -46,6 +46,6 @@ private:
     vector<ParticleSystem*> sistemas;
 
     // P3
-    ForceGenerator* generador;
+    vector<ForceGenerator*> generadores;
     int generadorActual = -1;
 };
