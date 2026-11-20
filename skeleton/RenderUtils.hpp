@@ -3,6 +3,7 @@
 
 #include "PxPhysicsAPI.h"
 #include "core.hpp"
+#include "Model.h"
 
 class RenderItem;
 void RegisterRenderItem(const RenderItem* _item);
@@ -64,4 +65,30 @@ Camera* GetCamera();
 
 physx::PxShape* CreateShape(const physx::PxGeometry& geo, const physx::PxMaterial* mat = nullptr);
 
+
+//Importar modelos
+class ModelRenderItem;
+void RegisterModelRenderItem(const ModelRenderItem* item);
+void DeregisterModelRenderItem(const ModelRenderItem* item);
+
+class ModelRenderItem
+{
+public:
+	ModelRenderItem(Model* _model, const physx::PxTransform* _transform, 
+		const physx::PxVec3& _scale = physx::PxVec3(1.0f)
+	)
+		: model(_model), transform(_transform), scale(_scale)
+	{
+		RegisterModelRenderItem(this);
+	}
+
+	~ModelRenderItem()
+	{
+		DeregisterModelRenderItem(this);
+	}
+
+	Model* model;
+	const physx::PxTransform* transform;
+	physx::PxVec3 scale;
+};
 #endif

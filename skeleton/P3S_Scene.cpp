@@ -92,27 +92,22 @@ void P3S_Scene::init() {
         Vector3D(30, 30, 30)));
 
     sistemas[0]->addGeneratorType(
-        generadores[0],
-        ParticleSystem::ForceType::GRAVITY
+        generadores[0]
     );
 
     sistemas[1]->addGeneratorType(
-        generadores[1],
-        ParticleSystem::ForceType::WIND
+        generadores[1]
     );
 
     sistemas[2]->addGeneratorType(
-        generadores[2],
-        ParticleSystem::ForceType::WHIRLWIND
+        generadores[2]
     );
 
     sistemas[3]->addGeneratorType(
-        generadores[3],
-        ParticleSystem::ForceType::EXPLOSION
+        generadores[3]
     );
     sistemas[3]->addGeneratorType(
-        generadores[2],
-        ParticleSystem::ForceType::WHIRLWIND
+        generadores[2]
     );
     
 }
@@ -206,4 +201,5 @@ void P3S_Scene::cleanup() {
     {
         delete generador;
     }
+    generadores.clear();
 }

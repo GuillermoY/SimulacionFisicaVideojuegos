@@ -55,35 +55,41 @@ void P1S_Scene::keyPress(unsigned char key, const physx::PxTransform& camera) {
     if (key == '+')
     {
         cout << "mas masa" << "\n";
+        actMass += 0.1f;
         for (auto proy : proyectiles)
             if (proy)
-                proy->setMass(proy->getMass() + 0.1f);
+                proy->setMass(actMass);
     }
     else if (key == '-')
     {
-        cout << "menos masa" << "\n";
+        actMass -= 0.1f;
+        if (actMass < 0)
+            actMass = 0.1f;
+        else
+            cout << "menos masa" << "\n";
         for (auto proy : proyectiles)
         {
-            proy->setMass(proy->getMass() - 0.1f);
-            if (proy->getMass() < 0)
-                if (proy)
-                    proy->setMass(0.1f);
+            proy->setMass(actMass);
         }        
     }
 
     if (key == 'M')
     {
         cout << "mas vel" << "\n";
+        actVel += 10.0f;
         for (auto proy : proyectiles)
             if (proy)
-                proy->setVel(proy->getVel() + 10.0f);
+                proy->setVel(actVel);
+            
+
     }
     else if (key == 'm')
     {
+        actVel -= 10.0f;
         cout << "menos vel" << "\n";
         for (auto proy : proyectiles)
             if (proy)
-                proy->setVel(proy->getVel() - 10.0f);
+                proy->setVel(actVel);
         
     }
 
@@ -102,11 +108,11 @@ void P1S_Scene::shoot(unsigned char key, const physx::PxTransform& camera)
     Particle* nPart;
     if (key == 'b')
     {
-        proyectiles.push_back(new Proyectil(posIni, posDir, 250.0f, Proyectil::ProjectileType::BOX));
+        proyectiles.push_back(new Proyectil(posIni, posDir, actVel, actMass, Proyectil::ProjectileType::BOX));
     }
     else
     {
-        proyectiles.push_back(new Proyectil(posIni, posDir, 250.0f, Proyectil::ProjectileType::SPHERE));
+        proyectiles.push_back(new Proyectil(posIni, posDir, actVel, actMass, Proyectil::ProjectileType::SPHERE));
     }
 }
 

@@ -9,7 +9,7 @@ public:
     Particle(Vector3D Pos, Vector3D Vel, float masa = 1, Vector3D accel = (0, 20, 0),
         Vector4 color = { 1.0f, 0.0f, 1.0f, 1.0f }, const physx::PxGeometry& geom = physx::PxSphereGeometry(2.0f),
         bool render = true, int typeVel = 1);
-    Particle(bool render);
+    Particle(bool render = true);
     Particle(const Particle& other, bool render = false);
     ~Particle();
 
@@ -31,6 +31,8 @@ public:
     void setPos(Vector3D newPos) { pose.p = newPos; pPos = newPos; }
     void setAccel(Vector3D newAccel) { ac = newAccel; }
 
+    //P4
+    void setTypeVel(int vel) { typeVel = vel; };
 private:
     // P1.1
     Vector3 vel;

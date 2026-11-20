@@ -1,17 +1,17 @@
 #include "Proyectil.h"
 
-Proyectil::Proyectil(Vector3D pos, Vector3D direc, float velReal, ProjectileType projType)
-    : vReal(velReal), p(nullptr)
+Proyectil::Proyectil(Vector3D pos, Vector3D direc, float velReal, float mReal, ProjectileType projType)
+    : vReal(velReal), p(nullptr), mReal(mReal)
 {
     dir = direc.normalize();
     if (projType == ProjectileType::BOX)
     {
-        mReal = 0.01f;
+        mReal += 0.01f;
         gReal = -9.8f;
     }
     else
     {
-        mReal = 5.0f;
+        mReal += 5.0f;
         gReal = -9.8f;
     }
 

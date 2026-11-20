@@ -47,4 +47,7 @@ private:
 
     vector<Proyectil*> proyectiles;
 
+    float actVel = 250.0f;
+    float actMass = 0.5f;
+
 };

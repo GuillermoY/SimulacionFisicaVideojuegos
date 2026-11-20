@@ -44,15 +44,23 @@ public:
 	bool				handleKey(unsigned char key, int x, int y, float speed = 1.0f);
 	void				handleMotion(int x, int y);
 	void				handleAnalogMove(float x, float y);
+	void				setMove(bool movement) { mCanMove = movement; };
+	bool				getMove() { return mCanMove; };
 
 	physx::PxVec3		getEye()	const;
 	physx::PxVec3		getDir()	const;
 	physx::PxTransform	getTransform() const;
+	void				setTransform(physx::PxTransform newPos, float distance, float height, float dt);
 private:
 	physx::PxVec3	mEye;
 	physx::PxVec3	mDir;
 	int				mMouseX;
 	int				mMouseY;
+	bool			mCanMove = true;
+
+	float			mSmoothTime = 10.0f;
+	bool			mInitialized = false;
+	physx::PxVec3	mAuxEye;
 };
 
 

@@ -13,7 +13,7 @@ public:
         SPHERE
     };
 
-    Proyectil(Vector3D pos, Vector3D dir, float velReal, ProjectileType projType);
+    Proyectil(Vector3D pos, Vector3D dir, float velReal, float mReal ,ProjectileType projType);
     ~Proyectil();
 
     void integrate(double t);

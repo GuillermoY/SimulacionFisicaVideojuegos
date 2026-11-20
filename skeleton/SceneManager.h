@@ -35,9 +35,18 @@ public:
 
     // Reenvía eventos de teclado a la escena actual.
     void keyPress(unsigned char key, const physx::PxTransform& cameraTransform);
+    // Reenvía eventos de teclado a la escena actual.
+    void specialKeyPress(int key, const physx::PxTransform& cameraTransform);
+
+    // Reenvía eventos de teclado a la escena actual.
+    void keyUp(unsigned char key, const physx::PxTransform& cameraTransform);
+    // Reenvía eventos de teclado a la escena actual.
+    void specialKeyUp(int key, const physx::PxTransform& cameraTransform);
 
     // Devuelve un puntero a la escena actual (no toma propiedad).
     [[nodiscard]] Scene* getCurrentScene() const { return m_currentScene.get(); }
+
+    void render();
 
 private:
     SceneManager() = default;

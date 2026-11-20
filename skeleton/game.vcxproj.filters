@@ -8,7 +8,6 @@
       <Filter>Render</Filter>
     </ClCompile>
     <ClCompile Include="RenderUtils.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -22,6 +21,28 @@
     <ClCompile Include="GravForceGenerator.h" />
     <ClCompile Include="ExplosionForceGenerator.h" />
     <ClCompile Include="Proyectil.cpp" />
+    <ClCompile Include="PTest_Scene.cpp" />
+    <ClCompile Include="Model.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="P4S_Scene.cpp" />
+    <ClCompile Include="LayoutGenerator.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ImageTexture.cpp">
+      <Filter>Render</Filter>
+    </ClCompile>
+    <ClCompile Include="P5S_Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -46,10 +67,43 @@
     <ClInclude Include="WindForceGenerator.h" />
     <ClInclude Include="WhirlWindForceGenerator.h" />
     <ClInclude Include="Proyectil.h" />
+    <ClInclude Include="PTest_Scene.h" />
+    <ClInclude Include="Model.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="P4S_Scene.h" />
+    <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="AnchoredSpringFG.h" />
+    <ClInclude Include="GameObject.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\stb_truetype.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="LayoutGenerator.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageTexture.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="BuoyancyForceGenerator.h" />
+    <ClInclude Include="P5S_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
       <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game">
+      <UniqueIdentifier>{78db4d09-b4ad-4315-a136-d8f2b5e0981e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -10,6 +10,7 @@ public:
 	ExplosionForceGenerator(float R,
 		float K, float t, Vector3D centro = { 0,0,0 }) :
 		 R(R), centro(centro), K(K), t(t) {
+		_updates = true;
 	};
 
 	~ExplosionForceGenerator() override = default;

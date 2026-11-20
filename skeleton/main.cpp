@@ -26,6 +26,9 @@
 #include "P1S_Scene.h"
 #include "P2S_Scene.h"
 #include "P3S_Scene.h"
+#include "P4S_Scene.h"
+#include "P5S_Scene.h"
+#include "PTest_Scene.h"
 
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
@@ -33,7 +36,7 @@
 #define PVD_HOST "127.0.0.1" // IP localhost for PVD connection
 
 
-std::string display_text = "This is a test";
+//std::string display_text = "This is a test";
 
 
 using namespace physx;
@@ -106,6 +109,9 @@ void initPhysics(bool interactive)
 	SceneManager::instance().registerScene<P1S_Scene>("P1S_Scene");
 	SceneManager::instance().registerScene<P2S_Scene>("P2S_Scene");
 	SceneManager::instance().registerScene<P3S_Scene>("P3S_Scene");
+	SceneManager::instance().registerScene<P4S_Scene>("P4S_Scene");
+	SceneManager::instance().registerScene<P5S_Scene>("P5S_Scene");
+	SceneManager::instance().registerScene<PTest_Scene>("PTest_Scene");
 
 	// Cargar la escena inicial
 	SceneManager::instance().changeScene("EscenaVacia");
@@ -192,6 +198,30 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	PX_UNUSED(camera);
 
 	SceneManager::instance().keyPress(key, camera);
+}
+
+// Function called when a key is no longer pressed
+void keyUp(unsigned char key, const PxTransform& camera)
+{
+	PX_UNUSED(camera);
+
+	SceneManager::instance().keyUp(key, camera);
+}
+
+// Function called when a key is pressed
+void specialKeyPress(int key, const PxTransform& camera)
+{
+	PX_UNUSED(camera);
+
+	SceneManager::instance().specialKeyPress(key, camera);
+}
+
+// Function called when a key is no longer pressed
+void specialKeyUp(int key, const PxTransform& camera)
+{
+	PX_UNUSED(camera);
+
+	SceneManager::instance().specialKeyUp(key, camera);
 }
 
 void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)

@@ -2,6 +2,7 @@
 
 #include <string>
 #include "PxPhysicsAPI.h"
+#include "Render/Camera.h"
 
 // Clase base para las distintas escenas de la aplicación.
 // Provee la interfaz mínima que debe implementar cualquier escena:
@@ -27,9 +28,20 @@ public:
     // permitir respuestas dependientes de la orientación/posición de la cámara.
     // Método opcional que puede ser sobrescrito por escenas que lo necesiten.
     virtual void keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {}
+    virtual void specialKeyPress(int key, const physx::PxTransform& cameraTransform) {}
+
+    // Manejo de liberación de tecla.
+    // Se recibe la tecla levantada y la transformada de la cámara para
+    // permitir respuestas dependientes de la orientación/posición de la cámara.
+    // Método opcional que puede ser sobrescrito por escenas que lo necesiten.
+    virtual void keyUp(unsigned char key, const physx::PxTransform& cameraTransform) {}
+    virtual void specialKeyUp(int key, const physx::PxTransform& cameraTransform) {}
 
     // Devuelve el nombre identificador de la escena.
     [[nodiscard]] const std::string& getName() const { return m_name; }
+
+
+    virtual void render() {};
 
 protected:
     // Nombre de la escena (útil para identificarla en menús o logs).

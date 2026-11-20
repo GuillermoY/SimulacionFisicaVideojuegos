@@ -11,4 +11,8 @@ public:
 	virtual void applyForceTo(Particle* p)=0;
 
 	virtual void integrate(double dt) {};
+
+	bool getUpdate() { return _updates; };
+protected:
+	bool _updates = false;
 };

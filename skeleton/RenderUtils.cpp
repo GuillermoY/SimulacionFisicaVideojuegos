@@ -1,10 +1,11 @@
 #include <vector>
+#include <algorithm>
 
 #include "PxPhysicsAPI.h"
 
 #include "core.hpp"
 #include "RenderUtils.hpp"
-
+#include "SceneManager.h"
 
 using namespace physx;
 
@@ -12,14 +13,21 @@ extern void initPhysics(bool interactive);
 extern void stepPhysics(bool interactive, double t);	
 extern void cleanupPhysics(bool interactive);
 extern void keyPress(unsigned char key, const PxTransform& camera);
+extern void specialKeyPress(int key, const PxTransform& camera);
+extern void keyUp(unsigned char key, const PxTransform& camera);
+extern void specialKeyUp(int key, const PxTransform& camera);
 extern PxPhysics* gPhysics;
 extern PxMaterial* gMaterial;
 
 std::vector<const RenderItem*> gRenderItems;
+std::vector<const ModelRenderItem*> gModelRenderItems; // Para los modelos 3D
 
 double PCFreq = 0.0;
 __int64 CounterStart = 0;
 __int64 CounterLast = 0;
+
+bool keys[256] = { false };
+bool specialKeys[256] = { false };
 
 void StartCounter()
 {
@@ -54,11 +62,39 @@ void motionCallback(int x, int y)
 
 void keyboardCallback(unsigned char key, int x, int y)
 {
-	if(key==27)
-		exit(0);
+    if (key == 27)
+        exit(0);
 
-	if(!sCamera->handleKey(key, x, y))
-		keyPress(key, sCamera->getTransform());
+    keys[key] = true;
+
+    if (!sCamera->handleKey(key, x, y))
+        keyPress(key, sCamera->getTransform());
+}
+
+void keyboardUpCallback(unsigned char key, int x, int y)
+{
+	keys[key] = false;
+
+	if (!sCamera->handleKey(key, x, y))
+		keyUp(key, sCamera->getTransform());
+}
+
+void specialKeyboardCallback(int key, int x, int y)
+{
+	if (key < 256)
+		specialKeys[key] = true;
+
+	if (!sCamera->handleKey(key, x, y))
+		specialKeyPress(key, sCamera->getTransform());
+}
+
+void specialKeyboardUpCallback(int key, int x, int y)
+{
+	if (key < 256)
+		specialKeys[key] = false;
+
+	if (!sCamera->handleKey(key, x, y))
+		specialKeyUp(key, sCamera->getTransform());
 }
 
 void mouseCallback(int button, int state, int x, int y)
@@ -114,6 +150,28 @@ void renderCallback()
 		renderShape(*obj->shape, objTransform ? *objTransform : physx::PxTransform(PxIdentity), obj->color);
 	}
 
+	for (const ModelRenderItem* obj : gModelRenderItems)
+	{
+		if (!obj || !obj->model || !obj->model->IsLoaded())
+			continue;
+
+		glPushMatrix();
+
+		physx::PxTransform transform = obj->transform ? *obj->transform : physx::PxTransform(physx::PxIdentity);
+
+		physx::PxMat44 matrix(transform);
+		// reinterpret_cast convierte un valor de puntero nulo al valor de puntero nulo del tipo de destino.
+		// glMultMatrixf() espera un puntero a float
+		glMultMatrixf(reinterpret_cast<const float*>(&matrix));
+
+		glScalef(obj->scale.x,
+			obj->scale.y,
+			obj->scale.z);
+
+		obj->model->Draw();
+
+		glPopMatrix();
+	}
 	//PxScene* scene;
 	//PxGetPhysics().getScenes(&scene, 1);
 	//PxU32 nbActors = scene->getNbActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC);
@@ -123,9 +181,12 @@ void renderCallback()
 	//	scene->getActors(PxActorTypeFlag::eRIGID_DYNAMIC | PxActorTypeFlag::eRIGID_STATIC, reinterpret_cast<PxActor**>(&actors[0]), nbActors);
 	//	renderActors(&actors[0], static_cast<PxU32>(actors.size()), true, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 	//}
+	SceneManager::instance().render();
+
 
 	finishRender();
 }
+
 
 void exitCallback(void)
 {
@@ -134,25 +195,19 @@ void exitCallback(void)
 }
 }
 
-void renderLoop()
+
+void RegisterModelRenderItem(const ModelRenderItem* item)
 {
-	StartCounter();
-	sCamera = new Camera(PxVec3(50.0f, 50.0f, 50.0f), PxVec3(-0.6f,-0.2f,-0.7f));
+	if (item)
+		gModelRenderItems.push_back(item);
+}
 
-	setupDefaultWindow("Simulacion Fisica Videojuegos");
-	setupDefaultRenderState();
+void DeregisterModelRenderItem(const ModelRenderItem* item)
+{
+	auto it = std::find(gModelRenderItems.begin(), gModelRenderItems.end(), item);
 
-	glutIdleFunc(idleCallback);
-	glutDisplayFunc(renderCallback);
-	glutKeyboardFunc(keyboardCallback);
-	glutMouseFunc(mouseCallback);
-	glutMotionFunc(motionCallback);
-	motionCallback(0,0);
-
-	atexit(exitCallback);
-
-	initPhysics(true);
-	glutMainLoop();
+	if (it != gModelRenderItems.end())
+		gModelRenderItems.erase(it);
 }
 
 void RegisterRenderItem(const RenderItem* _item)
@@ -165,6 +220,33 @@ void DeregisterRenderItem(const RenderItem* _item)
 	auto it = find(gRenderItems.begin(), gRenderItems.end(), _item);
 	gRenderItems.erase(it);
 }
+
+void renderLoop()
+{
+	StartCounter();
+	sCamera = new Camera(PxVec3(50.0f, 50.0f, 50.0f), PxVec3(-0.6f,-0.2f,-0.7f));
+
+	setupDefaultWindow("Simulacion Fisica Videojuegos");
+	setupDefaultRenderState();
+	glEnable(GL_TEXTURE_2D);
+
+	glutIdleFunc(idleCallback);
+	glutDisplayFunc(renderCallback);
+	glutKeyboardFunc(keyboardCallback);
+	glutKeyboardUpFunc(keyboardUpCallback);
+	glutSpecialFunc(specialKeyboardCallback);
+	glutSpecialUpFunc(specialKeyboardUpCallback);
+	glutMouseFunc(mouseCallback);
+	glutMotionFunc(motionCallback);
+	motionCallback(0,0);
+
+
+	atexit(exitCallback);
+
+	initPhysics(true);
+	glutMainLoop();
+}
+
 
 double GetLastTime()
 {

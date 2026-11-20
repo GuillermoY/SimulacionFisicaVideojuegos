@@ -69,15 +69,18 @@ void Particle::integrate(double t)
     if (mass <= 0.0f)
         return;
 
-    if (typeVel == 0)    // Parte 1.01
+    if (typeVel == 0)    // Parte 1.01: Euler explícito
     {
-        pose.p += vel * t;
-        ac = vel * t;
+        Vector3D oldVel = vel;
+
+        pose.p += oldVel * t;
+        vel += (ac + accAccel) * t;
+        //ac = vel * t;
     }
-    else if (typeVel == 1) // Parte 1.02 y 1.03
+    else if (typeVel == 1) // Parte 1.02 y 1.03: Euler semi-implícito
     {
-        pose.p += vel * t;
         vel = (vel + (ac + accAccel) * t);// *pow(d, t);
+        pose.p += vel * t;
     }
     else if (typeVel == 2)    // Parte 1.04: Verlet
     {

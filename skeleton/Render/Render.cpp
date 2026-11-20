@@ -29,6 +29,15 @@
 
 #include "Render.h"
 #include <assert.h>
+#include <iostream>
+
+#define STB_TRUETYPE_IMPLEMENTATION
+#include "stb_truetype.h"
+#include <vector>
+#include "../Vector3D.h"
+
+static GLuint gFontTexture = 0;
+static stbtt_bakedchar gCharData[96]; // Caracteres ASCII 32..126
 
 using namespace physx;
 
@@ -254,7 +263,16 @@ void setupDefaultWindow(const char *name)
 	int mainHandle = glutCreateWindow(name);
 	glutSetWindow(mainHandle);
 	glutReshapeFunc(reshapeCallback);
-	
+
+	std::cout << "OpenGL Version: "
+		<< glGetString(GL_VERSION) << std::endl;
+
+	std::cout << "OpenGL Renderer: "
+		<< glGetString(GL_RENDERER) << std::endl;
+
+	std::cout << "OpenGL Vendor: "
+		<< glGetString(GL_VENDOR) << std::endl;
+
 	delete[] namestr;
 }
 
@@ -288,7 +306,7 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 
 	// Display text
 	glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-	drawText(display_text, 0, 0);
+	//drawText("display_text", 0, 0);
 
 	// Setup camera
 	glMatrixMode(GL_PROJECTION);
@@ -382,7 +400,7 @@ void finishRender()
 	glutSwapBuffers();
 }
 
-void drawText(const std::string& text, int x, int y)
+void drawText(const std::string& text, int x, int y, void* font)
 {
 	glMatrixMode(GL_PROJECTION);	
 	double matrix[16];
@@ -397,15 +415,114 @@ void drawText(const std::string& text, int x, int y)
 
 	int length = text.length();
 
-	for (int i = 0; i < length; i++) {
-		glutBitmapCharacter(GLUT_BITMAP_9_BY_15, (int)text[i]);
-	}
+    for (unsigned int i = 0; i < text.length(); i++)
+    {
+        glutBitmapCharacter(font, text[i]);
+    }
 	glPopMatrix();
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixd(matrix);
 	glMatrixMode(GL_MODELVIEW);
 }
 
+void drawCustomText(const std::string& text, float x, float y, Vector3D RGB)
+{
+	if (gFontTexture == 0) return;
+
+	int winWidth = glutGet(GLUT_WINDOW_WIDTH);
+	int winHeight = glutGet(GLUT_WINDOW_HEIGHT);
+
+	glDisable(GL_LIGHTING);
+	glDisable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, gFontTexture);
+
+	// Guardar proyección
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glOrtho(0, winWidth, winHeight, 0, -1, 1);
+
+	// Guardar modelo
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+	glColor3f(RGB.x, RGB.y, RGB.z);
+
+	glBegin(GL_QUADS);
+
+	for (char c : text)
+	{
+		if (c >= 32 && c < 127)
+		{
+			stbtt_aligned_quad q;
+
+			stbtt_GetBakedQuad(gCharData, 512, 512, c - 32, &x, &y, &q, 1);
+
+			glTexCoord2f(q.s0, q.t0);
+			glVertex2f(q.x0, q.y0);
+
+			glTexCoord2f(q.s1, q.t0);
+			glVertex2f(q.x1, q.y0);
+
+			glTexCoord2f(q.s1, q.t1);
+			glVertex2f(q.x1, q.y1);
+
+			glTexCoord2f(q.s0, q.t1);
+			glVertex2f(q.x0, q.y1);
+		}
+	}
+
+	glEnd();
+
+	// Restaurar matrices
+	glPopMatrix();
+
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+
+	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+}
+bool initCustomFont(const char* fontPath, float fontSize)
+{
+	FILE* fontFile = fopen(fontPath, "rb");
+	if (!fontFile) return false;
+
+	fseek(fontFile, 0, SEEK_END);
+	long size = ftell(fontFile);
+	fseek(fontFile, 0, SEEK_SET);
+
+	std::vector<unsigned char> ttfBuffer(size);
+	fread(ttfBuffer.data(), 1, size, fontFile);
+	fclose(fontFile);
+
+	const int texW = 512, texH = 512;
+	std::vector<unsigned char> tempBitmap(texW * texH);
+
+	// Genera el atlas de la fuente en memoria
+	stbtt_BakeFontBitmap(ttfBuffer.data(), 0, fontSize, tempBitmap.data(), texW, texH, 32, 96, gCharData);
+
+	if (gFontTexture != 0) glDeleteTextures(1, &gFontTexture);
+	glGenTextures(1, &gFontTexture);
+	glBindTexture(GL_TEXTURE_2D, gFontTexture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, texW, texH, 0, GL_ALPHA, GL_UNSIGNED_BYTE, tempBitmap.data());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	return true;
+}
 
 
 } //namespace Snippets

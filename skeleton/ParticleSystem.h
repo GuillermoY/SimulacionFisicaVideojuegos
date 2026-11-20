@@ -8,6 +8,8 @@
 #include "WindForceGenerator.h"
 #include "WhirlWindForceGenerator.h"
 #include "ExplosionForceGenerator.h"
+#include "SpringForceGenerator.h"
+#include "AnchoredSpringFG.h"
 
 using namespace std;
 
@@ -21,15 +23,16 @@ public:
 		GRAVITY,
 		WIND,
 		WHIRLWIND,
-		EXPLOSION
+		EXPLOSION,
+		SPRING
 	};
 
 
 	ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos,
 		Vector4 color = { 1.0f, 0.0f, 0.5f, 1.0f }, const physx::PxGeometry& geo = physx::PxSphereGeometry(2.0f),
-		ForceType type = ForceType::GRAVITY);
+		ForceType type = ForceType::GRAVITY, bool generateParticles = true);
 	ParticleSystem(float velMin, float velMax, Vector3D distPos, Vector3D dir, Vector3D pos, Particle* p, 
-		ForceType type = ForceType::GRAVITY);
+		ForceType type = ForceType::GRAVITY, bool generateParticles = true);
 	~ParticleSystem();
 
 	void integrate(double t);
@@ -44,17 +47,28 @@ public:
 
 	void setNExplParts(int n) { nExplParts = n; };
 
-	void addGeneratorType(ForceGenerator* newForceGenerator, ForceType newType)
+	void addParticle(Particle* p)
 	{
-		typeF.push_back(newType);
+		particles.push_back(p);
+	}
 
+	void addGeneratorType(ForceGenerator* newForceGenerator)
+	{
 		forceGen.push_back(newForceGenerator);
 	}
+
+	void removeGeneratorType(ForceGenerator* forceGenerator)
+	{
+		forceGen.erase(remove(forceGen.begin(), forceGen.end(), forceGenerator), forceGen.end());
+	}
+	
+
 	void changeDistr() {
 		if (distr == 0)distr = 1;
 		else distr = 0;
 	};
 	void defineLimits(Vector3 maxLimit, Vector3 minLimit) { maxLimt = maxLimit; minLimt = minLimit; }
+
 
 private:
 	float velMax;
@@ -90,10 +104,12 @@ private:
 	void generatePart();
 	void updatePart(float t);
 
-	vector<ForceType> typeF;
 	bool activeExpl = false;
 	int nExplParts = 500;
 
 	Particle* pModelo;
 	bool hasP=false;
+
+	//P4
+	bool genParticles = true;
 };
