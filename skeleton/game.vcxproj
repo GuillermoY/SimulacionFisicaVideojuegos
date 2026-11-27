@@ -274,6 +274,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="Cars.h" />
     <ClCompile Include="ExplosionForceGenerator.h" />
     <ClCompile Include="GravForceGenerator.h" />
     <ClCompile Include="ImageTexture.cpp" />
@@ -290,6 +291,14 @@
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Practica5\EjerciciosCuaterniones.cpp" />
+    <ClCompile Include="Practica5\EscenaJoints.cpp" />
+    <ClCompile Include="Practica5\EscenaSolidosRigidos.cpp" />
+    <ClCompile Include="Practica5\GravedadSR.cpp" />
+    <ClCompile Include="Practica5\SistemaSolidoRigido.cpp" />
+    <ClCompile Include="Practica5\SolidoRigido.cpp" />
+    <ClCompile Include="Practica5\TorbellinoSR.cpp" />
+    <ClCompile Include="Practica5\VientoSR.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="PTest_Scene.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
@@ -303,7 +312,9 @@
   <ItemGroup>
     <ClInclude Include="AnchoredSpringFG.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="Coins.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="EmptyScene.h" />
     <ClInclude Include="ForceGenerator.h" />
@@ -321,6 +332,16 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Practica5\EjerciciosCuaterniones.h" />
+    <ClInclude Include="Practica5\EscenaJoints.h" />
+    <ClInclude Include="Practica5\EscenaSolidosRigidos.h" />
+    <ClInclude Include="Practica5\GeneradorFuerzaSR.h" />
+    <ClInclude Include="Practica5\GravedadSR.h" />
+    <ClInclude Include="Practica5\RegistroFuerzasSR.hpp" />
+    <ClInclude Include="Practica5\SistemaSolidoRigido.h" />
+    <ClInclude Include="Practica5\SolidoRigido.h" />
+    <ClInclude Include="Practica5\TorbellinoSR.h" />
+    <ClInclude Include="Practica5\VientoSR.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="PTest_Scene.h" />
     <ClInclude Include="RenderUtils.hpp" />
@@ -330,7 +351,9 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SpringForceGenerator.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Tile.h" />
     <ClInclude Include="WhirlWindForceGenerator.h" />
     <ClInclude Include="WindForceGenerator.h" />
   </ItemGroup>

@@ -12,16 +12,6 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Vector3D.h" />
-    <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="P0S_Scene.cpp" />
-    <ClCompile Include="P1S_Scene.cpp" />
-    <ClCompile Include="P2S_Scene.cpp" />
-    <ClCompile Include="ParticleSystem.cpp" />
-    <ClCompile Include="P3S_Scene.cpp" />
-    <ClCompile Include="GravForceGenerator.h" />
-    <ClCompile Include="ExplosionForceGenerator.h" />
-    <ClCompile Include="Proyectil.cpp" />
-    <ClCompile Include="PTest_Scene.cpp" />
     <ClCompile Include="Model.cpp">
       <Filter>Render</Filter>
     </ClCompile>
@@ -34,7 +24,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="P4S_Scene.cpp" />
     <ClCompile Include="LayoutGenerator.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -42,7 +31,69 @@
     <ClCompile Include="ImageTexture.cpp">
       <Filter>Render</Filter>
     </ClCompile>
-    <ClCompile Include="P5S_Scene.cpp" />
+    <ClCompile Include="Cars.h">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\EjerciciosCuaterniones.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\EscenaJoints.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\EscenaSolidosRigidos.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\GravedadSR.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\SistemaSolidoRigido.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\SolidoRigido.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\TorbellinoSR.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="Practica5\VientoSR.cpp">
+      <Filter>Practica5</Filter>
+    </ClCompile>
+    <ClCompile Include="ExplosionForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="GravForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClCompile>
+    <ClCompile Include="P0S_Scene.cpp">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClCompile>
+    <ClCompile Include="P1S_Scene.cpp">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClCompile>
+    <ClCompile Include="P2S_Scene.cpp">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClCompile>
+    <ClCompile Include="P3S_Scene.cpp">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClCompile>
+    <ClCompile Include="P4S_Scene.cpp">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClCompile>
+    <ClCompile Include="P5S_Scene.cpp">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Particulas</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem.cpp">
+      <Filter>Particulas</Filter>
+    </ClCompile>
+    <ClCompile Include="Proyectil.cpp">
+      <Filter>Particulas</Filter>
+    </ClCompile>
+    <ClCompile Include="PTest_Scene.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -57,17 +108,6 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="EmptyScene.h" />
-    <ClInclude Include="P0S_Scene.h" />
-    <ClInclude Include="Particle.h" />
-    <ClInclude Include="P1S_Scene.h" />
-    <ClInclude Include="P2S_Scene.h" />
-    <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="ForceGenerator.h" />
-    <ClInclude Include="P3S_Scene.h" />
-    <ClInclude Include="WindForceGenerator.h" />
-    <ClInclude Include="WhirlWindForceGenerator.h" />
-    <ClInclude Include="Proyectil.h" />
-    <ClInclude Include="PTest_Scene.h" />
     <ClInclude Include="Model.h">
       <Filter>Render</Filter>
     </ClInclude>
@@ -80,9 +120,6 @@
     <ClInclude Include="Player.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="P4S_Scene.h" />
-    <ClInclude Include="SpringForceGenerator.h" />
-    <ClInclude Include="AnchoredSpringFG.h" />
     <ClInclude Include="GameObject.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -95,15 +132,115 @@
     <ClInclude Include="ImageTexture.h">
       <Filter>Render</Filter>
     </ClInclude>
-    <ClInclude Include="BuoyancyForceGenerator.h" />
-    <ClInclude Include="P5S_Scene.h" />
+    <ClInclude Include="Coins.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\EjerciciosCuaterniones.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\EscenaJoints.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\EscenaSolidosRigidos.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\GeneradorFuerzaSR.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\GravedadSR.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\RegistroFuerzasSR.hpp">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\SistemaSolidoRigido.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\SolidoRigido.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\TorbellinoSR.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="Practica5\VientoSR.h">
+      <Filter>Practica5</Filter>
+    </ClInclude>
+    <ClInclude Include="AnchoredSpringFG.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="BuoyancyForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="WhirlWindForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="WindForceGenerator.h">
+      <Filter>GeneradorFuerzas</Filter>
+    </ClInclude>
+    <ClInclude Include="P0S_Scene.h">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClInclude>
+    <ClInclude Include="P1S_Scene.h">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClInclude>
+    <ClInclude Include="P2S_Scene.h">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClInclude>
+    <ClInclude Include="P3S_Scene.h">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClInclude>
+    <ClInclude Include="P4S_Scene.h">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClInclude>
+    <ClInclude Include="P5S_Scene.h">
+      <Filter>EscenasPracticas%28Hasta_la_4%29</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Particulas</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem.h">
+      <Filter>Particulas</Filter>
+    </ClInclude>
+    <ClInclude Include="Proyectil.h">
+      <Filter>Particulas</Filter>
+    </ClInclude>
+    <ClInclude Include="PTest_Scene.h">
+      <Filter>Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Render">
-      <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game">
       <UniqueIdentifier>{78db4d09-b4ad-4315-a136-d8f2b5e0981e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Practica5">
+      <UniqueIdentifier>{5dfe76c0-c781-45c5-abc8-ec87276e0ed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GeneradorFuerzas">
+      <UniqueIdentifier>{687d1c90-7708-4285-b9f6-941ca8e9fbb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EscenasPracticas%28Hasta_la_4%29">
+      <UniqueIdentifier>{bf63060b-020b-4072-8c78-cdf9cfbf1cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particulas">
+      <UniqueIdentifier>{7a215db0-9712-4903-a550-3fe5c9747640}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Render">
+      <UniqueIdentifier>{d04b4f9f-5a69-465e-8070-25c6d0bcd3c2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

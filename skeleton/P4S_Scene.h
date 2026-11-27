@@ -27,6 +27,7 @@ public:
     void cleanup() override;
 
 private:
+
     //P1.2 Opcional
     physx::PxTransform m_transform;
     // P2
@@ -41,6 +42,9 @@ private:
     WindForceGenerator* tempForce = nullptr;
     SpringForceGenerator* springForce1 = nullptr;
     SpringForceGenerator* springForce2 = nullptr;
+
+    AnchoredSpringFG* anchoredSpring = nullptr;
+
     float windTime = 0;
     float endWindTime = 3;
     bool windTimeStarted = false;

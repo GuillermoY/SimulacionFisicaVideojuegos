@@ -6,9 +6,12 @@
 class BuoyancyForceGenerator : public ForceGenerator
 {
 public:
-	BuoyancyForceGenerator(float h, float V, float d);
+	BuoyancyForceGenerator(float h, float V, float d, Particle* liquidPart) :
+		_height(h), _volume(V), _liquid_density(d), _liquid_particle(liquidPart)
+	{
+	};
 
-	virtual void updateForce(Particle* p)
+	virtual void applyForceTo(Particle* p) override
 	{
 		float h = p->getPos().y;
 		float h0 = _liquid_particle->getPos().y;
@@ -27,12 +30,16 @@ public:
 		p->applyForce(f);
 	}
 
-	virtual ~BuoyancyForceGenerator();
-protected:
-	float _height;
-	float _volume;
-	float _liquid_density;
-	float _gravity = 9.8;
+	float getVolume() { return _volume; };
+	void setVolume(float newVol) { _volume = newVol; };
 
-	Particle* _liquid_particle; 
+	virtual ~BuoyancyForceGenerator() { };
+protected:
+	float _height = 0;
+	float _volume = 0;
+	float _liquid_density = 0;
+	float _gravity = 9.8f;
+
+	Particle* _liquid_particle = nullptr;
 };
+
