@@ -7,9 +7,10 @@
 #include "ForceGenerator.h"
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include "GravForceGenerator.h"
 #include "SpringForceGenerator.h"
-#include "AnchoredSpringFG.h"
+#include "BuoyancyForceGenerator.h"
 
 using namespace std;
 
@@ -27,23 +28,11 @@ public:
     void cleanup() override;
 
 private:
-    //P1.2 Opcional
-    physx::PxTransform m_transform;
-    // P2
-    physx::PxTransform m_transformPart;
+
+    BuoyancyForceGenerator* buoyancyForce = nullptr;
+    Particle* floatingObject = nullptr;
+
     vector<Particle*> particulas;
     vector<ParticleSystem*> sistemas;
-
-    // P3
     vector<ForceGenerator*> generadores;
-    int generadorActual = -1;
-
-    WindForceGenerator* tempForce = nullptr;
-    SpringForceGenerator* springForce1 = nullptr;
-    SpringForceGenerator* springForce2 = nullptr;
-    float windTime = 0;
-    float endWindTime = 3;
-    bool windTimeStarted = false;
-
-    int typeVel = 0;
 };

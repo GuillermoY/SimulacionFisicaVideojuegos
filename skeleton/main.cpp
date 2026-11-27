@@ -30,6 +30,10 @@
 #include "P5S_Scene.h"
 #include "PTest_Scene.h"
 
+//Practica Sólido Rígido
+#include "Practica5/EscenaSolidosRigidos.h"
+#include "Practica5/EjerciciosCuaterniones.h"
+
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
 
@@ -60,6 +64,11 @@ ContactReportCallback gContactReportCallback;
 double gPhysicsTimeAccumulator = 0.0;
 const double gFixedTimestep = 1.0 / 60.0;
 
+//Practica 5
+const bool ACTIVAP5 = false;
+
+EscenaSolidosRigidos gEscenaP5;
+EjerciciosCuaterniones gEjerciciosP5;
 
 void initPhysics(bool interactive)
 {
@@ -104,6 +113,8 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	// Registrar las prácticas/escenas del curso
+	SceneManager::instance().addPhysicsScript(gPhysics, gScene, gFoundation);
+
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
 	SceneManager::instance().registerScene<P0S_Scene>("P0S_Scene");
 	SceneManager::instance().registerScene<P1S_Scene>("P1S_Scene");
@@ -111,11 +122,15 @@ void initPhysics(bool interactive)
 	SceneManager::instance().registerScene<P3S_Scene>("P3S_Scene");
 	SceneManager::instance().registerScene<P4S_Scene>("P4S_Scene");
 	SceneManager::instance().registerScene<P5S_Scene>("P5S_Scene");
-	SceneManager::instance().registerScene<PTest_Scene>("PTest_Scene");
+
+	gEscenaP5.init(gPhysics, gScene);
+	gEjerciciosP5.init(gPhysics, gScene);
 
 	// Cargar la escena inicial
 	SceneManager::instance().changeScene("EscenaVacia");
 	
+	//Escenas de juego
+	SceneManager::instance().registerScene<PTest_Scene>("PTest_Scene");
 }
 
 
@@ -134,6 +149,10 @@ void stepPhysics(bool interactive, double t)
 	// This loop allows for multiple physics steps if the accumulated time exceeds the fixed timestep
 	while (gPhysicsTimeAccumulator >= gFixedTimestep)
 	{
+		//Practica 5
+		gEscenaP5.update(static_cast<float>(gFixedTimestep));
+
+
 		// simulate() arranca la simulación de forma asíncrona en el hilo de físicas
 		gScene->simulate(static_cast<PxReal>(gFixedTimestep));
 
@@ -151,7 +170,11 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
-	 
+	
+	//Practica 5
+	gEscenaP5.cleanup();
+	gEjerciciosP5.cleanup();
+
 	// Clean scene and dispatcher first to avoid memory leaks
 	if (gScene) {
 		gScene->release();
@@ -197,7 +220,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 {
 	PX_UNUSED(camera);
 
-	SceneManager::instance().keyPress(key, camera);
+	if (ACTIVAP5)
+	{
+		gEscenaP5.keyPress(key);
+		gEjerciciosP5.keyPress(key);
+	}
+	else
+		SceneManager::instance().keyPress(key, camera);
 }
 
 // Function called when a key is no longer pressed
